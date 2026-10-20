@@ -1,0 +1,82 @@
+[Unit]
+Description=CLIO Kronos — candlestick foundation-model forecaster (advisory, market-data read-only)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/openclaw
+ExecStart=/home/agent/openclaw/venv/bin/python3 -u -m agent.kronos
+Restart=on-failure
+RestartSec=15
+TimeoutStartSec=60
+# Graceful shutdown: __main__.py handles SIGTERM by setting an asyncio.Event
+# that run_forever polls between wakes (an idle sleep is interrupted
+# immediately); a run already in flight is bounded by
+# CLIO_KRONOS_RUN_TIMEOUT (default 240s) regardless, so TimeoutStopSec is
+# set above that bound rather than the flowcollector unit's 30s. A SIGKILL
+# after it is harmless: every state write is atomic.
+KillSignal=SIGTERM
+TimeoutStopSec=300
+
+# CPU discipline: a torch CPU inference call is real, bursty CPU work
+# (unlike the flowcollector's pure-Python aggregation) -- Nice + CPUQuota
+# keep it from starving the live trading engine's own process during a run,
+# same rationale as Hydrinia's KRONOS_TORCH_THREADS clamp
+# (agent/kronos/vendor/VENDOR_PIN.md §4's load-sweep finding).
+Nice=10
+# A ceiling, not the working limit: torch uses CLIO_KRONOS_TORCH_THREADS (default 6, clamp 1-8) cores,
+# so the thread count can be tuned by env alone up to 8 without editing this unit.
+CPUQuota=800%
+# Measured 2026-09-27: one run (2 symbols x 16 paths x 400 bars, 4 threads) peaked at ~1.5 GB RSS on the
+# VPS (91 s) and ~1.2 GB in a clean process. Above MemoryHigh the kernel throttles and reclaims, which
+# slows inference toward the run timeout, so MemoryHigh sits well above the measured peak. An OOM kill
+# would only make the pillar stale (flow-only composite).
+MemoryHigh=2560M
+MemoryMax=3072M
+
+# Environment. The model is loaded from the local Hugging Face cache only (bound read-only below):
+# offline mode means huggingface_hub never tries the network or cache writes from inside the sandbox.
+Environment=PYTHONUNBUFFERED=1
+Environment=HF_HUB_OFFLINE=1
+Environment=HF_HUB_DISABLE_TELEMETRY=1
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=clio-kronos
+
+# Security hardening (this process is market-data READ-ONLY: no order
+# submission, no position/ledger writes -- see agent/kronos/bars.py's module
+# docstring, which only ever calls Alpaca's read-only get_stock_bars). The
+# repo itself is bound READ-ONLY (ProtectHome=tmpfs replaces /home with an
+# empty tmpfs, so a bind is required just to make the real repo content
+# visible at all -- BindReadOnlyPaths does that without granting write
+# access to it). The ONLY writable path anywhere is data/intelligence/
+# (kronos_forecast.json / kronos_scores.json / kronos_history.jsonl);
+# ReadWritePaths carves that one subdirectory back out of the read-only bind
+# above it (must be listed after the read-only bind for the override to
+# apply). data/intelligence must exist before start (moltbot creates it; the
+# deploy steps mkdir -p it) -- ReadWritePaths on a missing path fails the
+# unit. The pinned Kronos/tokenizer weights live in the Hugging Face cache
+# under the service account's home directory (NOT under
+# /home/agent/openclaw) -- a second read-only bind exposes it so
+# `local_files_only=True` can actually find the cached weights;
+# `python -m agent.kronos --download` (an operator-run deploy step, not part
+# of this unit) is what populates that cache in the first place. The "-"
+# prefix on both extra binds makes them optional (never fails the unit if
+# the cache doesn't exist yet, or an unrelated Hydrinia-adjacent path is
+# absent since Hydrinia is retired).
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=tmpfs
+BindReadOnlyPaths=/home/agent/openclaw
+BindReadOnlyPaths=-/home/agent/.cache/huggingface
+ReadWritePaths=/home/agent/openclaw/data/intelligence
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,39 @@
+[Unit]
+Description=Moltbot Telegram AI Agent
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=notify
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/openclaw
+ExecStart=/home/agent/openclaw/venv/bin/python3 -u main.py
+Restart=on-failure
+RestartSec=15
+TimeoutStartSec=120
+TimeoutStopSec=360
+WatchdogSec=300
+MemoryMax=4G
+MemoryHigh=3G
+Environment="NODE_OPTIONS=--max-old-space-size=2048"
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=moltbot
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/home/agent/openclaw /home/agent/tradingbot
+ProtectHome=tmpfs
+BindPaths=/home/agent/openclaw /home/agent/tradingbot
+
+[Install]
+WantedBy=multi-user.target

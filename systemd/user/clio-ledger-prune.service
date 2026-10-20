@@ -1,0 +1,14 @@
+[Unit]
+Description=CLIO UW quota-ledger weekly prune, 30-day retention (S211 LED-1)
+# Backup-first (SQLite online backup into /home/agent/backups/uw_quota/, never overwritten), then delete rows older
+# than 30 days in short rowid batches, then VACUUM. Never deletes an unsynced outbox row or a pending reservation.
+# A non-zero exit marks this unit failed ON PURPOSE so `systemctl --user --failed` shows it. Log: logs/uw_ledger_prune.log
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/agent/openclaw
+ExecStart=/home/agent/openclaw/venv/bin/python3 /home/agent/openclaw/scripts/uw_ledger_prune.py --older-than-days 30 --apply --vacuum
+StandardOutput=append:/home/agent/openclaw/logs/uw_ledger_prune.log
+StandardError=append:/home/agent/openclaw/logs/uw_ledger_prune.log
+TimeoutStartSec=1800
+Nice=10

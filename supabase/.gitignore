@@ -1,0 +1,9 @@
+# Supabase CLI cache state — do not commit
+.branches
+.temp
+
+# Local environment overlays (use supabase secrets for prod values)
+.env
+
+# Generated function-level deno caches
+**/.deno

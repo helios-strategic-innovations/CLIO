@@ -1,0 +1,104 @@
+.env
+.env.bak
+*.enc.yaml
+secrets.*
+moltbot.pid
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+node_modules/
+venv/
+.venv/
+logs/
+*.log
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+docker-compose.override.yml
+data/conversations.db
+# Runtime knowledge base — CLIO's churning learning state (2,700+ files, ~21MB).
+# Was tracked only as an artifact of `git add -A` pre-CC-session checkpoints, not
+# deliberate versioning. Untracked 2026-06-15 (operator-approved DR hygiene) to
+# match tradingbot's gitignored state/. Files stay on disk; covered by ~/backups
+# (hourly) + Hetzner daily image. Hydrinia bridge dir data/knowledge/trade_ideas
+# is read from disk, unaffected by this rule.
+data/knowledge/
+# .claude/ stays local (settings, hooks, skills), except the two read-only memory-compaction
+# agents (2026-09-28). `**` + a re-included dir, never a trailing-slash parent (anti-pattern #23).
+.claude/**
+!.claude/agents/
+!.claude/agents/memory-*.md
+*.lock
+*.bak
+*.backup
+.gitnexus/
+# Inferred: AGENTS.md is local/operator guidance, not CLIO runtime source.
+AGENTS.md
+
+# Graphify knowledge graph output
+graphify-out/
+
+# ============ S184 file-space reorganization ============
+# Archive dirs grow unbounded — don't track contents.
+# Exception: session summaries stay tracked everywhere (operator B2).
+.archive/
+prompts/archive/
+audits/archive/
+docs/plans/archive/
+sessions/archive/**
+!sessions/archive/**/
+!sessions/archive/**/*.md
+!sessions/archive/**/.gitkeep
+
+# Retrieval-personality shadow trace (runtime observability; interim)
+data/personality/retrieval_shadow.jsonl
+data/personality/retrieval_shadow.jsonl.*
+
+# Aster CLIO runtime hygiene 2026-08-06 (V2-CLIO PHASE-2)
+data/conversations.db-shm
+data/conversations.db-wal
+data/daily_task_runs.json
+data/intelligence/analytics_fun_facts.json
+data/intelligence/auction_calendar.json
+data/intelligence/bond_intel_state.json
+data/intelligence/commodity_research_state.json
+data/intelligence/earnings_calendar.json
+data/intelligence/econ_calendar.json
+data/intelligence/fed_analysis_state.json
+data/intelligence/geopolitical_research_state.json
+data/intelligence/macro_research_state.json
+data/intelligence/news_intel_state.json
+data/intelligence/trade_policy_state.json
+# CLIO-native runtime state (DPOF / intel v3, 2026-09-24/25)
+data/intelligence/market_regime.json
+data/intelligence/vol_surface.json
+data/intelligence/econ_surprise.json
+data/intelligence/newsflash_state.json
+data/intelligence/selfflow_state.json
+data/intelligence/selfflow_compare.jsonl
+data/memory/episodic/episodic_2026-03.jsonl
+data/memory/episodic/episodic_2026-04.jsonl
+# Aster/agent Mission Control backup and build-output snapshots
+mission_control/aster_ui_backup_*/
+mission_control/frontend/aster_ui_backup_*/
+mission_control/frontend/dist.backup.aster-*/
+mission_control/frontend/dist.failed.aster-*/
+mission_control/frontend/dist.old_market_structure_*/
+
+# Generated report and active-session inventories
+reports/
+
+# Prompt working queue; prompts/archive remains the deliberate keep surface
+prompts/active/
+
+# CLIO DPOF runtime state + optional local secrets (never commit)
+data/dpof/
+data/secrets/
+
+# decision-record producer — outbox + recorded-outcome-id state (never commit)
+data/decisions/

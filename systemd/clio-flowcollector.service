@@ -1,0 +1,57 @@
+[Unit]
+Description=CLIO flowcollector — self-computed Alpaca OPRA/SIP options-flow pillars (SHADOW ONLY, advisory, market-data read-only)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/openclaw
+ExecStart=/home/agent/openclaw/venv/bin/python3 -u -m agent.flowcollector
+Restart=on-failure
+RestartSec=15
+TimeoutStartSec=60
+# Graceful shutdown: __main__.py handles SIGTERM by draining/joining its
+# stream-supervisor threads and writing one final state snapshot before
+# exiting -- give it real time rather than letting systemd SIGKILL mid-write.
+KillSignal=SIGTERM
+TimeoutStopSec=30
+MemoryMax=512M
+MemoryHigh=384M
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=clio-flowcollector
+
+# Security hardening (this process is market-data READ-ONLY: no order
+# submission, no position/ledger writes -- see agent/flowcollector/__init__.py's
+# docstring). The repo itself is bound READ-ONLY (ProtectHome=tmpfs replaces
+# /home with an empty tmpfs, so a bind is required just to make the real repo
+# content visible at all -- BindReadOnlyPaths does that without granting
+# write access to it). The ONLY writable path anywhere is
+# data/intelligence/ (selfflow_state.json / selfflow_compare.jsonl);
+# ReadWritePaths carves that one subdirectory back out of the read-only bind
+# above it (must be listed after the read-only bind for the override to
+# apply). CLIO's own UW-flow export under
+# /home/agent/tradingbot/moltbot_knowledge/intelligence/ is read-only
+# comparison input (see agent/flowcollector/state.py) -- the "-" prefix makes
+# that bind optional since Hydrinia is retired and the directory may be
+# absent, which must not stop the unit from starting. Logs go to journald
+# only. data/intelligence must exist before start (moltbot creates it; the
+# deploy steps mkdir -p it) -- ReadWritePaths on a missing path fails the unit.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=tmpfs
+BindReadOnlyPaths=/home/agent/openclaw
+BindReadOnlyPaths=-/home/agent/tradingbot/moltbot_knowledge/intelligence
+ReadWritePaths=/home/agent/openclaw/data/intelligence
+
+[Install]
+WantedBy=multi-user.target

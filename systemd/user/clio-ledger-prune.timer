@@ -1,0 +1,12 @@
+[Unit]
+Description=CLIO UW quota-ledger prune, Sundays 04:00 ET (S211 LED-1)
+
+[Timer]
+# Sunday 04:00 ET: no session, no DPOF activity, UW traffic at its overnight minimum.
+OnCalendar=Sun 04:00:00 America/New_York
+AccuracySec=1min
+Persistent=true
+Unit=clio-ledger-prune.service
+
+[Install]
+WantedBy=timers.target

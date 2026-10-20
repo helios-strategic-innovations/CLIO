@@ -1,0 +1,4 @@
+# Development / CI tooling only — not required at runtime.
+pytest>=8.0.0
+ruff>=0.6.0
+mypy>=1.11.0

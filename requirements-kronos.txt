@@ -1,0 +1,26 @@
+# CLIO Kronos — optional/heavy extras for the forecaster service only
+# (agent/kronos/). NOT part of the main agent's requirements.txt: this
+# service runs in its own systemd unit/process (systemd/clio-kronos.service)
+# and nothing else in the repo may import torch (see
+# tests/test_kronos_isolation.py) -- install into the venv only when
+# deploying agent/kronos, same posture as requirements-dev.txt.
+#
+# alpaca-py is already a root requirements.txt dependency (agent/kronos/
+# bars.py reuses it) -- not repeated here.
+#
+# CPU-only torch, from PyTorch's own CPU wheel index (avoids pulling
+# multi-GB CUDA wheels on a CPU-only VPS):
+#   pip install -r requirements-kronos.txt --extra-index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.0.0
+
+# Minimum versions (Hydrinia's provisioned kronos_vendor/requirements.txt pins these exact
+# versions; see agent/kronos/vendor/VENDOR_PIN.md). Floors, not pins, so installing this into the
+# shared CLIO venv never downgrades a package something else already uses. The vendored
+# model/kronos.py + model/module.py need: einops (module.py), huggingface_hub's
+# PyTorchModelHubMixin + tqdm.trange (kronos.py); safetensors is the hub's weight format.
+pandas>=2.2.2
+tqdm>=4.67.1
+einops>=0.8.1
+huggingface_hub>=0.33.1
+safetensors>=0.6.2

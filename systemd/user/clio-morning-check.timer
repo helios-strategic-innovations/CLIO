@@ -1,0 +1,11 @@
+[Unit]
+Description=CLIO morning health check, weekdays 09:50 ET (S211 PROC-1)
+
+[Timer]
+OnCalendar=Mon..Fri 09:50:00 America/New_York
+AccuracySec=30s
+Persistent=false
+Unit=clio-morning-check.service
+
+[Install]
+WantedBy=timers.target

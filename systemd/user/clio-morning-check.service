@@ -1,0 +1,14 @@
+[Unit]
+Description=CLIO morning health check (read-only; S211 PROC-1)
+# Writes one PASS/WARN/FAIL line per check to logs/morning_check.log. Changes nothing: no restarts, no state writes.
+# Exit 1 (a FAIL was found) marks this unit failed ON PURPOSE so `systemctl --user --failed` shows it.
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/agent/openclaw
+Environment=CLIO_ROOT=/home/agent/openclaw
+ExecStart=/home/agent/openclaw/venv/bin/python3 /home/agent/openclaw/scripts/morning_check.py
+StandardOutput=append:/home/agent/openclaw/logs/morning_check.log
+StandardError=append:/home/agent/openclaw/logs/morning_check.log
+TimeoutStartSec=180
+Nice=10
