@@ -18,4 +18,4 @@ The four separate synthetic cases are saved outputs from the existing re-entry e
 
 ## Checks and rights
 
-`checks/interaction_result.txt`, `checks/static_result.txt` and `checks/lint_result.txt` capture local synthetic-DOM and static checks. They are not browser-rendering, accessibility audit, current runtime or live-account evidence. The included IANA notice is in `tzdata/TZDATA_COPYRIGHT.txt`. CLIO was created by Dominic Newman with AI assistance. No Helios code license is assigned in this draft; public release remains an owner decision.
+`checks/interaction_result.txt`, `checks/static_result.txt` and `checks/lint_result.txt` capture local synthetic-DOM and static checks. They are not browser-rendering, accessibility audit, current runtime or live-account evidence. The included IANA notice is in `tzdata/TZDATA_COPYRIGHT.txt`. CLIO was created by Dominic Newman with AI assistance. Original CLIO demonstration code is MIT-licensed; [LICENSE_SCOPE.md](LICENSE_SCOPE.md) distinguishes excluded brand/media/evidence materials and preserved third-party notices.
