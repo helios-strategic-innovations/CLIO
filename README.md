@@ -1,5 +1,7 @@
 # CLIO
 
+**Decision Desk demo:** [Open the hosted dashboard](https://helios-strategic-innovations.github.io/CLIO/) or [inspect its source](https://github.com/helios-strategic-innovations/CLIO/tree/codex/clio-demo-pages-20261104). The dashboard presents selected recorded PAPER evidence and synthetic cases; it is not connected to a live account.
+
 CLIO (Continuous Learning Intelligence Operations) is an AI-assisted options research and paper-trading system for SPY and QQQ, built by Helios Strategic Innovations. It runs as a long-lived Python service with a Telegram interface, a phone line, and a web dashboard.
 
 **Status:** paper trading only. Nothing in this repository is investment advice or a record of trading returns.
@@ -49,6 +51,4 @@ Architecture decision records are in `docs/design/adr/`, and the DPOF, Kronos, a
 
 ## License
 
-Copyright (c) 2026 Helios Strategic Innovations. All rights reserved.
-
-This repository is published for reference. No license is granted to use, copy, modify, or distribute the code.
+Original CLIO code is available under the [MIT License](LICENSE). See [LICENSE_SCOPE.md](LICENSE_SCOPE.md) for excluded brand/media/evidence materials and preserved third-party notices.
