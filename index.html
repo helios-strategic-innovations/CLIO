@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A read-only CLIO demonstration using historical and synthetic records.">
+<title>CLIO | Decision desk</title><link rel="stylesheet" href="styles.css">
+<script defer src="records_data.js"></script><script defer src="case_data.js"></script><script defer src="dashboard.js"></script>
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar" aria-label="CLIO navigation">
+  <a class="wordmark" href="#top">HELIOS<span>Strategic Innovations</span></a>
+  <div class="agent"><img src="assets/clio-card.jpg" width="1920" height="1080" alt="CLIO"><span>Decision intelligence</span></div>
+  <p class="nav-title">Workspace</p>
+  <nav class="nav" aria-label="Dashboard sections">
+    <button type="button" class="nav-item active" data-page="records" aria-current="page"><span aria-hidden="true">▤</span> Decision journal</button>
+    <button type="button" class="nav-item" data-page="synthetic"><span aria-hidden="true">◇</span> Synthetic cases</button>
+    <button type="button" class="nav-item" data-page="about"><span aria-hidden="true">≡</span> Evidence &amp; scope</button>
+  </nav>
+  <div class="sidebar-bottom"><span class="side-note">Read-only demonstration</span><span>No live account connected</span></div>
+</aside>
+<div class="workspace" id="top">
+<header class="topbar"><div class="breadcrumbs">CLIO <span>/</span> <strong id="page-title">Decision journal</strong></div><div class="top-right"><span class="snapshot-tag">Recorded snapshot</span><button type="button" class="theme-button" id="theme-marble" aria-pressed="false">Marble</button><button type="button" class="theme-button" id="theme-basalt" aria-pressed="true">Basalt</button><div class="corporate-mark"><img src="assets/helios-logo.png" width="1865" height="549" alt="Helios Strategic Innovations"></div></div></header>
+<main class="content">
+<div class="intro"><div><h1>Interrogate the decision.</h1><p>Evidence, judgment and controls in one read-only desk.</p></div><div class="intro-right"><span>Snapshot cutoff</span><strong>Nov 4, 2026 · 12:15 ET</strong><small>Selected historical PAPER records</small></div></div>
+<div class="notice" role="note"><strong>Offline demonstration.</strong> Historical records and synthetic cases are separate. There is no live feed, account connection or order control.</div>
+<section id="panel-records" class="panel-page" data-panel="records" aria-label="Decision journal">
+<div class="section-heading"><div><h2>Decision journal</h2><p>Selected recorded model events from two anonymized PAPER cases.</p></div><div class="actions"><button class="button ghost" type="button" id="reload">Reload snapshot</button><button class="button primary" type="button" id="export-record">Export selected</button></div></div>
+<div class="workbench">
+<div class="journal surface"><div class="panel-head"><div><h3>Recorded events</h3><p>Six selected records, not a complete history</p></div><label class="filter">Show <select id="record-filter"><option value="all">All events</option><option value="entry">Entries</option><option value="review">Reviews</option></select></label></div>
+<div class="table-wrap"><table><thead><tr><th>Case</th><th>Event</th><th>Model</th><th>Attempt</th><th><span class="sr-only">Inspect</span></th></tr></thead><tbody id="records-body"></tbody></table></div><p id="empty-state" class="empty" hidden>No records match this filter.</p><p class="table-note">Sequence is the saved display order, not a per-event timestamp.</p></div>
+<aside class="inspector surface" aria-label="Selected decision trace"><div class="panel-head"><div><h3>Decision trace</h3><p id="trace-subtitle">Select a recorded event</p></div><span class="tag">Recorded</span></div><div id="record-detail" class="detail-body"><p>Select an event to inspect the available evidence.</p></div><div class="clio-art"><div><strong>CLIO</strong><span>Decision intelligence</span><p>Evidence before action.</p></div><img src="assets/clio-figure.png" width="400" height="600" alt=""></div></aside>
+</div><div class="bottom-grid"><div class="mini surface"><h3>Meta model evidence</h3><p>Selected pre-install PAPER records show Wonder 1.0 entry deliberations and Spark 1.3 position reviews.</p><a href="META_EVIDENCE.json">Open categorical evidence</a></div><div class="mini surface"><h3>What remains unknown</h3><p>Fills, costs and outcome value are not in this sanitized snapshot. No financial performance claim is made.</p><a href="PROVENANCE.md">Read provenance</a></div></div>
+</section>
+<section id="panel-synthetic" class="panel-page" data-panel="synthetic" aria-label="Synthetic cases" hidden>
+<div class="section-heading"><div><h2>Synthetic case inspector</h2><p>Four outputs saved from the source evaluator. Selecting a case replays its captured result.</p></div><button class="button primary" type="button" id="export-case">Export selected</button></div>
+<div class="synthetic-layout"><div class="surface scenario-list"><div class="panel-head"><div><h3>Test scenarios</h3><p>Synthetic, not market data</p></div><span class="tag synthetic">Synthetic</span></div><div id="cases-list"></div></div><div class="surface inspector"><div class="panel-head"><div><h3>Observer result</h3><p>Diagnostic only, no order effect</p></div><span class="tag synthetic">Replay</span></div><div id="case-detail" class="detail-body"></div></div></div>
+<div class="notice compact">The installed PAPER shadow has no verified normal post-restart market event or measured economic benefit. The browser does not execute the evaluator.</div>
+</section>
+<section id="panel-about" class="panel-page" data-panel="about" aria-label="Evidence and scope" hidden>
+<div class="section-heading"><div><h2>Evidence &amp; scope</h2><p>What this desk can show, and what remains outside the record.</p></div></div>
+<div class="about-grid"><article class="surface mini"><h3>Recorded, not live</h3><p>The journal is a sanitized selection of earlier PAPER events through the stated cutoff. No account balances, orders or raw prompts appear here.</p></article><article class="surface mini"><h3>Synthetic, not a trade</h3><p>Four replay cases were generated by the existing evaluator and compared with a derived offline adapter. No model, broker or provider call is made here.</p></article><article class="surface mini"><h3>Source and attribution</h3><p>CLIO was created by Dominic Newman with AI assistance. The full private backend is not included.</p><a href="PROVENANCE.md">Open provenance and license notice</a></article><article class="surface mini"><h3>Telegram</h3><p>Open the existing CLIO bot in Telegram. Sign-in and access remain with Telegram; this dashboard does not send or poll messages.</p><a class="telegram-link" href="https://t.me/DN_Moltbot" target="_blank" rel="noopener noreferrer">Open CLIO in Telegram <span>@DN_Moltbot</span></a><label for="telegram-command" class="command-label">Verified status command</label><div class="command-row"><input id="telegram-command" value="/dpof status" readonly><button class="button ghost" id="copy-command" type="button">Copy command</button></div><p id="copy-status" class="note" aria-live="polite"></p></article></div>
+</section>
+</main><footer><span>CLIO / Helios Strategic Innovations</span><span>Built for scrutiny. Ad Astra.</span></footer>
+</div></div>
+<noscript><p class="noscript">This offline desk needs JavaScript to select recorded and synthetic cases. The evidence files remain available locally.</p></noscript>
+</body></html>

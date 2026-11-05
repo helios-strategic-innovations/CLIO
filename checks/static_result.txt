@@ -1,0 +1,1 @@
+PASS: 3 panels, local assets/references, sole explicit Telegram link, 6 exact sanitized records, 4 synthetic cases, no remote assets

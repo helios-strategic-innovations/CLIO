@@ -1,0 +1,1 @@
+PASS: 6 records; entry/review filters; selected trace; reload; 3 panes; 4 synthetic cases; 2 local exports; both themes; clipboard success/fallback; no network API in owned scripts
